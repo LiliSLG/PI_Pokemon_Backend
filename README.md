@@ -1,2 +1,2 @@
 # PI-Pokemon
-Proyecto individua HenryI-Pokemon
+Proyecto individual Henry-Pokemon
