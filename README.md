@@ -263,3 +263,15 @@ Ten en cuenta que en esta instancia no es obligatorio el desarrollo de testing p
 git add .
 git commit -m "first commit"
 git push
+
+
+back:
+npm i nodemon sequelize pg postgres ... ver package.json
+
+front:
+npm react 
+
+npm install --save-dev jest supertest (para que se instale como dependencia)
+si quiero desinstalar: npm uninstall jest supertest
+Además, dentro del package.json deberás agregar el siguiente script:
+   "test": "jest --detectOpenHandles --coverage"
