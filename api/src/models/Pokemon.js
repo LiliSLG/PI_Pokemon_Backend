@@ -8,12 +8,12 @@ module.exports = (sequelize) => {
     {
       id: {
         type: DataTypes.UUID,
-        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
       idAPI: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       name: {
         type: DataTypes.STRING,
