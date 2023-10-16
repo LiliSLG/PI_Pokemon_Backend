@@ -7,7 +7,7 @@ const { API_URL } = process.env;
 const pokemonsGetAllByNames = async (name) => {
   //funcion para cargar los nombres de los pokemones , porque la api solo busca por nombre completo, no parcial
   //busco los nombres en la BDD
-  const pokemonsNames = await PokemonName.findAll({ attributes: ["name"] });
+  const pokemonsNames = await PokemonName.findAll({ attributes: ["name", "id"] });
   if (pokemonsNames.length === 0) {
     //busco todos los nombres de la API
     const pokemonsRawFromAPI = await axios(`${API_URL}/pokemon?limit=900`); //limite para que traiga a todos los pokemones

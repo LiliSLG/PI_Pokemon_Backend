@@ -5,20 +5,30 @@ const { pokemonMapFromAPI, pokemonMapFromDB } = require("../utils/mapPokemons");
 const { API_URL } = process.env;
 
 const pokemonsGetAll = async () => {
-  const pokemonsFromDB = await Pokemon.findAll({
-    include: {
-      model: Type,
-      attributes: ["name"],
-    },
-  });
-  const pokemonsRawFromAPI = await axios(`${API_URL}/pokemon?limit=12`);
-  const pokemonURLRequestsAPI = pokemonsRawFromAPI.data?.results.map(
-    (pokemon) => axios.get(pokemon.url)
-  );
-  const pokemonURLResponsesAPI = await Promise.all(pokemonURLRequestsAPI);
-  const pokemonDataAPI = pokemonURLResponsesAPI.map(
-    (response) => response.data
-  );
+  let pokemonsFromDB;
+  let pokemonDataAPI;
+  try {
+    pokemonsFromDB = await Pokemon.findAll({
+      include: {
+        model: Type,
+        attributes: ["id", "name"],
+      },
+    });
+  } catch (error) {
+    pokemonsFromDB = [];
+    // console.log("Error en la BDD");
+  }
+  try {
+    const pokemonsRawFromAPI = await axios(`${API_URL}/pokemon?limit=12`);
+    const pokemonURLRequestsAPI = pokemonsRawFromAPI.data?.results.map(
+      (pokemon) => axios.get(pokemon.url)
+    );
+    const pokemonURLResponsesAPI = await Promise.all(pokemonURLRequestsAPI);
+    pokemonDataAPI = pokemonURLResponsesAPI.map((response) => response.data);
+  } catch (error) {
+    pokemonDataAPI = [];
+    // console.log("Error en la API");
+  }
   const pokemonsMapedAPI = pokemonMapFromAPI(pokemonDataAPI);
   const pokemonsMapedDB = pokemonMapFromDB(pokemonsFromDB);
   return [...pokemonsMapedDB, ...pokemonsMapedAPI];

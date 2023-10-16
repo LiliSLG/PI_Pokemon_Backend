@@ -11,11 +11,12 @@ const pokemonGetById = async (id, source) => {
       : await Pokemon.findByPk(id, {
           include: {
             model: Type,
+            attributes: ["id", "name"],
           },
         });
   return source === "api"
-    ? pokemonMapFromAPI([pokemon])
-    : pokemonMapFromDB([pokemon]);
+    ? pokemonMapFromAPI([pokemon])[0]
+    : pokemonMapFromDB([pokemon])[0];
 };
 
 module.exports = { pokemonGetById };

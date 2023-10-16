@@ -25,7 +25,7 @@ const pokemonPost = async (
     speed,
   });
 
-  await newPokemon.addType(TypeIds);
+  await newPokemon.addTypes(TypeIds);
   // for (let index = 0; index < TypeIds.length; index++) {
   //   const typeId = TypeIds[index]; //el tipo me viene por id, y ya existe en la bdd
   //   await newPokemon.addType(+typeId);
