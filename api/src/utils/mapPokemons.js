@@ -15,6 +15,7 @@ const pokemonMapFromAPI = (pokemonsFromAPI) =>
         name: t.type.name,
       })),
       created: false,
+      idAPI: null,
     };
   });
 
@@ -32,6 +33,7 @@ const pokemonMapFromDB = (pokemonsFromDB) =>
       speed: pokemon.speed,
       types: pokemon.types?.map((type) => ({ id: type.id, name: type.name })),
       created: true, //ver
+      idAPI: pokemon.idAPI
     };
   });
 

@@ -45,15 +45,16 @@ const Detail = () => {
     event.preventDefault();
     if (!pokemonDetail.created) {
       alert("This Pokemon is from API and cant be deleted!");
-      return
+      return;
     }
     try {
       const confirmed = window.confirm(
         "Are you sure you want to delete this Pokemon?"
       );
       if (confirmed) {
-        await dispatch(pokemonDelete(id));
+        dispatch(pokemonDelete(id));
         alert("Pokemon deleted!");
+        handleClose()
       }
     } catch (error) {
       console.error(error);
@@ -66,7 +67,10 @@ const Detail = () => {
       {/* <h1 className={style.title}> Detalle de Pokemon</h1> */}
       {refresh && (
         <div className={style.card}>
-          <div className={style.leftPanel} style={{ backgroundColor: colorType }}>
+          <div
+            className={style.leftPanel}
+            style={{ backgroundColor: colorType }}
+          >
             <div>
               <p className={style.titleName}>
                 {pokemonDetail.name.toUpperCase()}

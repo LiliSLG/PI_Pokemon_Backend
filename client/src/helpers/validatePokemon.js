@@ -29,17 +29,17 @@ export function validatePokemon(pokemonData) {
 
   if (
     pokemonData.height === "" ||
-    +pokemonData.height > 200 ||
+    +pokemonData.height > 1500 ||
     +pokemonData.height < 1
   )
-    errors.height = "Height in cm must be between 1 and 200 cm";
+    errors.height = "Height in cm must be between 1 and 1500 cm";
 
   if (
     pokemonData.weight === "" ||
-    +pokemonData.weight > 10000 ||
+    +pokemonData.weight > 1000000 ||
     +pokemonData.weight < 1
   )
-    errors.weight = "Weight in grams must be between 1 and 10000 gr";
+    errors.weight = "Weight in grams must be between 1 and 1000000 gr";
 
   if (
     pokemonData.speed === "" ||

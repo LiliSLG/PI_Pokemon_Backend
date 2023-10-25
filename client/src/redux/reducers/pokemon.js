@@ -3,6 +3,7 @@ import { actionTypes } from "../action-types";
 const initialState = {
   pokemons: [],
   pokemonDetail: {},
+  lastPokemonFromAPI: [],
   types: [],
   pagination: {
     totalPokemonsDB: 0,
@@ -19,12 +20,12 @@ const pokemon = (state = initialState, action) => {
     case actionTypes.GET_POKEMONS: {
       const { totalPokemonsDB, totalPokemonsAPI } = action.payload;
       const currentPageNumberAPI = state.pagination.currentPageNumberAPI + 1;
-      state.pokemons.push(...action.payload.pokemons);//agrego los pokemons que cargo
+      const newPokemons = state.pokemons;
+      newPokemons.push(...action.payload.pokemons);
+      newPokemons.sort((a, b) => a.name.localeCompare(b.name));
       return {
         ...state,
-        pokemons: state.pokemons.sort((a, b) =>
-          a.name.localeCompare(b.name)
-        ),
+        pokemons: newPokemons,
         pagination: {
           ...state.pagination,
           currentPageNumberAPI,
@@ -33,6 +34,27 @@ const pokemon = (state = initialState, action) => {
         },
       };
     }
+
+    case actionTypes.GET_POKEMONS_FROM_API: {
+      const pokemons = state.pokemons;
+      const newAPIPokemons = action.payload.pokemons;
+      // saco los repetidos
+      const uniquePokemons = [
+        ...pokemons,
+        ...newAPIPokemons.filter(
+          (newAPIPokemons) =>
+            !pokemons.find((pokemons) => pokemons.id === newAPIPokemons.id)
+        ),
+      ];
+      newAPIPokemons.push(...action.payload.pokemons);
+      newAPIPokemons.sort((a, b) => a.name.localeCompare(b.name));
+      return {
+        ...state,
+        pokemons: uniquePokemons,
+        lastPokemonFromAPI: [...action.payload.pokemons],
+      };
+    }
+
     case actionTypes.GET_POKEMON_BY_ID: //lo llamo desde card para ver el detail, por lo tanto seguro esta en el estado
       return { ...state, pokemonDetail: action.payload };
 
@@ -74,6 +96,7 @@ const pokemon = (state = initialState, action) => {
       const filteredPokemons = state.pokemons.filter(
         (pokemon) => pokemon.id !== action.payload.id
       );
+      filteredPokemons.sort((a, b) => a.name.localeCompare(b.name)); //ordeno por si modificaron el nombre
       return {
         ...state,
         pokemonDetail: action.payload,
@@ -94,7 +117,7 @@ const pokemon = (state = initialState, action) => {
           ...state.pagination,
           totalPokemonsDB: state.pagination.totalPokemonsDB - 1,
         },
-      };      
+      };
     }
     case actionTypes.CLOSE_POKEMON: {
       //saco el que borramos, seguro esta en el estado
@@ -102,11 +125,23 @@ const pokemon = (state = initialState, action) => {
         (pokemon) => pokemon.id !== action.payload
       );
       return {
-        ...state,        
-        pokemons: [...filteredPokemons],     
-      };      
+        ...state,
+        pokemons: [...filteredPokemons],
+      };
     }
-
+    case actionTypes.POST_POKEMON_FROM_API: {
+      //busco el poke con el numrero de API par sacarlo
+      //agrego el nuevo poke guardado en la bdd
+      const filteredPokemons = state.pokemons.filter(
+        (pokemon) => pokemon.id !== action.payload.idAPI
+      );
+      filteredPokemons.push(action.payload.pokemons);
+      filteredPokemons.sort((a, b) => a.name.localeCompare(b.name));
+      return {
+        ...state,
+        pokemons: filteredPokemons,
+      };
+    }
     case actionTypes.SET_USER_PAGINATION_DATA: {
       const { pageNumber, pokemonsPerPage } = action.payload;
       return {

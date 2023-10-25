@@ -1,7 +1,7 @@
 const { pokemonsGetAll, pokemonGetByName } = require("../controllers");
 
 const pokemonHandlerGetAll = async (req, res) => {
-  const { name, page, pageSize } = req.query;
+  const { name, getFromAPI, page, pageSize } = req.query;
   try {
     let results;
     if (name) {
@@ -10,7 +10,7 @@ const pokemonHandlerGetAll = async (req, res) => {
         return res.status(404).json({ error: "Pokemon not found" });
       }
     } else {
-      results = await pokemonsGetAll(page, pageSize);
+      results = await pokemonsGetAll(getFromAPI, page, pageSize);
     }
     res.json(results);
   } catch (error) {
@@ -19,5 +19,5 @@ const pokemonHandlerGetAll = async (req, res) => {
 };
 
 module.exports = {
-  pokemonHandlerGetAll, 
+  pokemonHandlerGetAll,
 };

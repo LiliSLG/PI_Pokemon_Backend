@@ -56,20 +56,35 @@ const getPokemonFromBD = async (page, pageSize) => {
   } catch (error) {
     console.log("Error en la BDD", error.message);
     return [];
-  } 
+  }
 };
 
-const pokemonsGetAll = async (page, pageSize) => {
-  const [pokemonsMappedDB, pokemonsMappedAPI] = await Promise.all([
-    //uso el mismo page, pageSize para api y bdd. En algun momento se podria modificar
-    //preguntar si totalPokemonsDB es < pageSize no buscar en la bdd
-    getPokemonFromBD(page, pageSize),
-    getPokemonFromAPI(page, pageSize),
-  ]);
+const pokemonsGetAll = async (getFromAPI, page, pageSize) => {
+  let pokemonsMappedAPI = [];
+  let pokemonsMappedDB = [];
+  let allPokemons = [];
+  let totalPokemonsDB = 0;
+  let totalPokemonsAPI = 0;
+
+  if (getFromAPI === "true") {//por params viene como string
+    pokemonsMappedAPI = await getPokemonFromAPI(page, pageSize);
+    allPokemons = [...pokemonsMappedAPI.pokemons];
+  } else {
+    [pokemonsMappedDB, pokemonsMappedAPI] = await Promise.all([
+      getPokemonFromBD(page, pageSize),
+      getPokemonFromAPI(page, pageSize),
+    ]);
+    totalPokemonsDB = pokemonsMappedDB.totalPokemons;
+    totalPokemonsAPI = pokemonsMappedAPI.totalPokemons;
+    allPokemons = [...pokemonsMappedDB.pokemons, ...pokemonsMappedAPI.pokemons];
+  }
+
+  allPokemons.sort((a, b) => a.name.localeCompare(b.name));
+
   return {
-    pokemons: [...pokemonsMappedDB.pokemons, ...pokemonsMappedAPI.pokemons],
-    totalPokemonsDB: pokemonsMappedDB.totalPokemons,
-    totalPokemonsAPI: pokemonsMappedAPI.totalPokemons,
+    pokemons: [...allPokemons],
+    totalPokemonsDB,
+    totalPokemonsAPI,
   };
 };
 

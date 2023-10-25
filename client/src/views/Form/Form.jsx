@@ -37,6 +37,11 @@ const Form = () => {
       //por ahora funciona para los created
       setCreateForm(false);
       setForm(pokemonDetail);
+      if (!pokemonDetail.created) {
+        alert(
+          "Attention! This Pokemon was copied from the Pokemon API. It would be good if you didn't modify their original values!"
+        );
+      }
     }
   }, []);
 
@@ -95,23 +100,24 @@ const Form = () => {
     setForm(updatedForm);
     setErrors(errors);
   }
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // const imageData = reader.result;
+        const updatedForm = {
+          ...form,
+          image: file.name,
+        };
+        const errors = validatePokemon(updatedForm);
 
-    reader.onloadend = () => {
-      const imageData = reader.result;
-      console.log(imageData);
-      // Do something with the image data, such as storing it in the component state
-      // or sending it to the server for further processing
-    };
-
-    reader.readAsDataURL(file);
-    console.log(file);
-    // setForm({
-    //   ...form,
-    //   image: file,
-    // });
+        setErrors(errors);
+        setForm(updatedForm);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleClose = () => {
@@ -166,60 +172,73 @@ const Form = () => {
             NAME
           </label>
           <input
+            className={errors.name && style.warning}
             name="name"
             type="text"
             value={form.name}
             onChange={handleChange}
           />
-          {errors.name && <span>{errors.name}</span>}
+          {errors.name && (
+            <p className={errors.name && style.danger}>{errors.name}</p>
+          )}
         </div>
         <div>
           <label className={style.description} htmlFor="image">
             IMAGE
           </label>
           <input
-            type="file"
-            id="image"
+            type="text"
             name="image"
-            accept="image/*"
-            onChange={handleImageUpload}
+            value={form.image}
+            className={errors.image && style.warning}
+            onChange={handleChange}
           />
-          {errors.image && <span>{errors.image}</span>}
+          {errors.image && (
+            <p className={errors.image && style.danger}>{errors.image}</p>
+          )}
         </div>
         <div className={style.pesoAltura}>
           <div>
             <label className={style.description} htmlFor="height">
               HEIGHT
             </label>
-            <input className={style.inputPesoAltura} 
+            <input
+              class={style.inputPesoAltura}
               name="height"
               type="number"
               min="0"
-              max="150"
+              // max="1500"
               value={form.height}
+              className={errors.height && style.warning}
               onChange={handleChange}
             />
             <label className={style.description} htmlFor="height">
               cm.
             </label>
-            {errors.height && <span>{errors.height}</span>}
+            {errors.height && (
+              <p className={errors.height && style.danger}>{errors.height}</p>
+            )}
           </div>
           <div>
             <label className={style.description} htmlFor="weight">
               WEIGHT
             </label>
-            <input className={style.inputPesoAltura} 
+            <input
+              class={style.inputPesoAltura}
               name="weight"
               type="number"
               min="0"
-              max="150"
+              // max="1000000"
               value={form.weight}
+              className={errors.weight && style.warning}
               onChange={handleChange}
             />
             <label className={style.description} htmlFor="weight">
               gr.
             </label>
-            {errors.weight && <span>{errors.weight}</span>}
+            {errors.weight && (
+              <p className={errors.weight && style.danger}>{errors.weight}</p>
+            )}
           </div>
         </div>
         <div className={style.stats}>
@@ -234,9 +253,12 @@ const Form = () => {
               max="999"
               // placeholder="HP"
               value={form.hp}
+              className={errors.hp && style.warning}
               onChange={handleChange}
             />
-            {errors.hp && <span>{errors.hp}</span>}
+            {errors.hp && (
+              <p className={errors.hp && style.danger}>{errors.hp}</p>
+            )}
           </div>
           <div>
             <label className={style.description} htmlFor="attack">
@@ -249,9 +271,12 @@ const Form = () => {
               max="999"
               // placeholder="Attack"
               value={form.attack}
+              className={errors.attack && style.warning}
               onChange={handleChange}
             />
-            {errors.attack && <span>{errors.attack}</span>}
+            {errors.attack && (
+              <p className={errors.attack && style.danger}>{errors.attack}</p>
+            )}
           </div>
           <div>
             <label className={style.description} htmlFor="defense">
@@ -264,9 +289,12 @@ const Form = () => {
               max="999"
               // placeholder="Defense"
               value={form.defense}
+              className={errors.defense && style.warning}
               onChange={handleChange}
             />
-            {errors.defense && <span>{errors.defense}</span>}
+            {errors.defense && (
+              <p className={errors.defense && style.danger}>{errors.defense}</p>
+            )}
           </div>
           <div>
             <label className={style.description} htmlFor="speed">
@@ -279,9 +307,12 @@ const Form = () => {
               max="999"
               // placeholder="Speed"
               value={form.speed}
+              className={errors.speed && style.warning}
               onChange={handleChange}
             />
-            {errors.speed && <span>{errors.speed}</span>}
+            {errors.speed && (
+              <p className={errors.speed && style.danger}>{errors.speed}</p>
+            )}
           </div>
         </div>
         <div>
@@ -309,7 +340,9 @@ const Form = () => {
               );
             })}
           </div>
-          {errors.types && <span>{errors.types}</span>}
+          {errors.types && (
+            <p className={errors.types && style.danger}>{errors.types}</p>
+          )}
         </div>
         <div>
           <button

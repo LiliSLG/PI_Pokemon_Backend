@@ -14,7 +14,7 @@ export const getPokemons = (page, pageSize) => {
     try {
       handleSetFooterAppStatus(dispatch, "LOADING POKEMONS", 2);
       const pokemon = await axios(
-        `${URL_API}/?page=${page}&pageSize=${pageSize}`
+        `${URL_API}/?getFromAPI=false&page=${page}&pageSize=${pageSize}`
       );
       dispatch({
         type: actionTypes.GET_POKEMONS,
@@ -42,6 +42,25 @@ export const getPokemons = (page, pageSize) => {
   };
 };
 
+export const getPokemonsFromAPI = (page, pageSize) => {
+  return async function (dispatch) {
+    //esto lo ejecuta applyMiddleware
+    try {
+      handleSetFooterAppStatus(dispatch, "LOADING API POKEMONS", 2);
+      const pokemon = await axios(
+        `${URL_API}/?getFromAPI=true&page=${page}&pageSize=${pageSize}`
+      );
+      dispatch({
+        type: actionTypes.GET_POKEMONS_FROM_API,
+        payload: pokemon.data,
+      });
+      handleSetFooterAppStatus(dispatch, "API POKEMONS LOADED", 1);
+    } catch (error) {
+      handleSetFooterAppStatus(dispatch, "ERROR LOADING API POKEMONS", 3);
+      alert("Error loading API Pokemons. " + error.message);
+    }
+  };
+};
 // VERSION PROMESAS
 // export const getPokemons = () => {
 //   return async function (dispatch) {

@@ -4,19 +4,24 @@ import style from "./Card.module.css";
 import { colorsByType } from "../../helpers/pokemonColorsByType";
 import { pokemonClose, pokemonSaveToBdd } from "../../redux/actions";
 
-
 const Card = (props) => {
   const { pokemon } = props;
   const dispatch = useDispatch();
 
-  const color = colorsByType[pokemon.types[0].name];
+  let colorType = pokemon.types
+    ? colorsByType[pokemon.types[0].name]
+    : "#000000";
 
   const handleClose = (id) => {
     dispatch(pokemonClose(id));
   };
 
   const handleSaveToBdd = (id) => {
-    dispatch(pokemonSaveToBdd(id));
+    try {
+      dispatch(pokemonSaveToBdd(id));
+    } catch (error) {
+      alert("Something went wrong. Please try again later.");
+    }
   };
 
   const renderTypes = () => {
@@ -39,7 +44,7 @@ const Card = (props) => {
         <div>
           <div
             className={style.pokemonFondoColor}
-            style={{ backgroundColor: color }}
+            style={{ backgroundColor: colorType }}
           >
             <img
               className={style.cardImage}
@@ -78,7 +83,11 @@ const Card = (props) => {
             <p>Types:</p>
             <div>{renderTypes()}</div>
             {pokemon.created ? (
-              <p>Created</p>
+              pokemon.idAPI ? (
+                <p>Imported from API</p>
+              ) : (
+                <p>Created</p>
+              )
             ) : (
               <p>
                 <b>#{pokemon.id}</b> from API
