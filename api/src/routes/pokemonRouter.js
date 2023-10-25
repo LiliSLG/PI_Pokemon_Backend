@@ -1,7 +1,5 @@
 const express = require("express");
-const {
-  validatePokemon
-} = require("../middlewares/validatePokemon");
+const { validatePokemon, validatePagination } = require("../middlewares/");
 const {
   pokemonHandlerGetAll,
   pokemonHandlerGetAllByNames,
@@ -15,7 +13,7 @@ const pokemonRouter = express.Router();
 
 pokemonRouter.get("/names", pokemonHandlerGetAllByNames);
 pokemonRouter.get("/name?", pokemonHandlerGetAll);
-pokemonRouter.get("/", pokemonHandlerGetAll);
+pokemonRouter.get("/", validatePagination, pokemonHandlerGetAll);
 pokemonRouter.get("/:id", pokemonHandlerById);
 pokemonRouter.post("/", validatePokemon, pokemonHandlerPost);
 pokemonRouter.put("/:id", validatePokemon, pokemonHandlerPut);

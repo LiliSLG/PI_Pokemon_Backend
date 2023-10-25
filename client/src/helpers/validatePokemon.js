@@ -1,4 +1,4 @@
-export function validateNewPokemon(pokemonData) {
+export function validatePokemon(pokemonData) {
   //   // const regexletrasynumeros = new RegExp(/^(?:.*\d){1}/);
   //   // const regexCaracteresInvalidos = new RegExp(/^(?:.*?[#?!@$ %^&*-])/);
   const regexImage = new RegExp(/(https?:\/\/.*\.(?:png|jpg|gif|svg))/);
@@ -29,17 +29,17 @@ export function validateNewPokemon(pokemonData) {
 
   if (
     pokemonData.height === "" ||
-    +pokemonData.height > 150 ||
+    +pokemonData.height > 200 ||
     +pokemonData.height < 1
   )
-    errors.height = "The value must be between 1 and 150 height";
+    errors.height = "Height in cm must be between 1 and 200 cm";
 
   if (
     pokemonData.weight === "" ||
-    +pokemonData.weight > 150 ||
+    +pokemonData.weight > 10000 ||
     +pokemonData.weight < 1
   )
-    errors.weight = "The value must be between 1 and 150 weight";
+    errors.weight = "Weight in grams must be between 1 and 10000 gr";
 
   if (
     pokemonData.speed === "" ||

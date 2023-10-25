@@ -10,7 +10,10 @@ const pokemonMapFromAPI = (pokemonsFromAPI) =>
       attack: pokemon.stats[1].base_stat,
       defense: pokemon.stats[2].base_stat,
       speed: pokemon.stats[5].base_stat,
-      types: pokemon.types.map((t) => ({id: t.type.url.substring(31, 33), name: t.type.name})),
+      types: pokemon.types.map((t) => ({
+        id: t.type.url.split("/")[6],
+        name: t.type.name,
+      })),
       created: false,
     };
   });
@@ -27,12 +30,12 @@ const pokemonMapFromDB = (pokemonsFromDB) =>
       attack: pokemon.attack,
       defense: pokemon.defense,
       speed: pokemon.speed,
-      types: pokemon.types?.map((type) => ({id: type.id, name: type.name})),
+      types: pokemon.types?.map((type) => ({ id: type.id, name: type.name })),
       created: true, //ver
     };
   });
 
-  const pokemonMapNames = (pokemonsFromAPI) =>
+const pokemonMapNames = (pokemonsFromAPI) =>
   pokemonsFromAPI.map((pokemon) => {
     return {
       name: pokemon.name,
@@ -42,5 +45,5 @@ const pokemonMapFromDB = (pokemonsFromDB) =>
 module.exports = {
   pokemonMapFromAPI,
   pokemonMapFromDB,
-  pokemonMapNames
+  pokemonMapNames,
 };

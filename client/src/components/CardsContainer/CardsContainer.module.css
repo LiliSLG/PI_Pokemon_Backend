@@ -1,15 +1,69 @@
-.card_list {
-  width: 85vw;
-  margin: 0 auto;
+.card_container {
+  width: 98%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
+  overflow: auto;
+  margin-bottom: 100px; /* Ajusta el margen inferior entre los componentes */
+  margin-top: 10px;
 }
 
-/* .card_list {
-    display: flex;
-    flex-direction: row;
-    border-radius: 15px;
-    flex-wrap: wrap;
-    gap: 1em;
-} */
+.container {
+  display: flex;
+  /* flex: 1; */
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  margin-top: 10px;
+  /* margin-bottom: 10px; */
+}
+
+.navsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.navsContainer > * {
+  margin-right: 10px; /* Ajusta el margen derecho entre los componentes según sea necesario */
+}
+
+.filtersContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1 1 auto;
+  /* border: 1px solid rgb(172, 18, 18); */
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1 1 auto;
+  /* border: 1px solid rgb(172, 18, 18); */
+}
+
+
+.createButton {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Estilos adicionales para hacer los componentes responsivos */
+@media screen and (max-width: 768px) {
+  .navsContainer {
+    flex-direction: column;
+  }
+}
+.espacioFooter {
+  height: 100px;
+  left: 0;
+  bottom: 0;
+}

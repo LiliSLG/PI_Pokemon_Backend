@@ -1,18 +1,23 @@
 import axios from "axios";
-import { POST_POKEMON } from "../action-types";
+import { URL_API } from "../../../constants";
+import { actionTypes } from "../../action-types";
+import { handleSetFooterAppStatus } from "../../../handlers/handleFooterMessages";
 
-const URL_API = "/pokemons";
+// const URL_API = "/pokemons";
 
 export const createPokemon = (pokemon) => {
   return async function (dispatch) {
     //esto lo ejecuta applyMiddleware
     try {
+      handleSetFooterAppStatus(dispatch, "CREATING POKEMON " + pokemon.name, 2);
       const newPokemon = (await axios.post(URL_API, pokemon)).data;
       dispatch({
-        type: POST_POKEMON,
+        type: actionTypes.POST_POKEMON,
         payload: newPokemon,
-      });
+      });      
+      handleSetFooterAppStatus(dispatch, "POKEMON CREATED"+ pokemon.name, 1);
     } catch (error) {
+      handleSetFooterAppStatus(dispatch, "ERROR CREATING POKEMON " + pokemon.name, 3);
       alert("Error creating a new Pokemon.", error.message);
     }
   };

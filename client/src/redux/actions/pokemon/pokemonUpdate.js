@@ -1,18 +1,29 @@
 import axios from "axios";
-import { PUT_POKEMON } from "../action-types";
+import { URL_API } from "../../../constants";
+import { actionTypes } from "../../action-types";
+import { handleSetFooterAppStatus } from "../../../handlers/handleFooterMessages";
 
-const URL_API = "/pokemons";
+// const URL_API = "/pokemons";
 
 export const updatePokemon = (pokemon) => {
   return async function (dispatch) {
     //esto lo ejecuta applyMiddleware
     try {
-      const updatedPokemon = (await axios.put(`${URL_API}/${pokemon.id}`, pokemon)).data;
+      handleSetFooterAppStatus(dispatch, "UPDATING POKEMON " + pokemon.name, 2);
+      const updatedPokemon = (
+        await axios.put(`${URL_API}/${pokemon.id}`, pokemon)
+      ).data;
       dispatch({
-        type: PUT_POKEMON,
-        payload: updatedPokemon,
+        type: actionTypes.PUT_POKEMON,
+        payload: updatedPokemon[0],
       });
+      handleSetFooterAppStatus(dispatch, "POKEMON UPDATED" + pokemon.name, 1);
     } catch (error) {
+      handleSetFooterAppStatus(
+        dispatch,
+        "ERROR UPDATING POKEMON " + pokemon.name,
+        3
+      );
       alert("Error updating Pokemon.", error.message);
     }
   };

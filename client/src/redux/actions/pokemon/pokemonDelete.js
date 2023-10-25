@@ -1,18 +1,24 @@
 import axios from "axios";
-import { DEL_POKEMON } from "../action-types";
+import { URL_API } from "../../../constants";
+import { actionTypes } from "../../action-types";
+import { handleSetFooterAppStatus } from "../../../handlers/handleFooterMessages";
 
-const URL_API = "/pokemons";
+
+// const URL_API = "/pokemons";
 
 export const pokemonDelete = (pokemonId) => {
   return async function (dispatch) {
     //esto lo ejecuta applyMiddleware
     try {
+      handleSetFooterAppStatus(dispatch, "DELETING POKEMON", 2);
       const deletedPokemon = (await axios.delete(`${URL_API}/${pokemonId}`)).data;
       dispatch({
-        type: DEL_POKEMON,
-        payload: deletedPokemon,
+        type: actionTypes.DEL_POKEMON,
+        payload: pokemonId,
       });
+      handleSetFooterAppStatus(dispatch, "POKEMON DELETED", 1);
     } catch (error) {
+      handleSetFooterAppStatus(dispatch, "ERROR DELETING POKEMON", 3);
       alert("Error deleting Pokemon.", error.message);
     }
   };

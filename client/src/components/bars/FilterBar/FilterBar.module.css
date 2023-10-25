@@ -1,0 +1,28 @@
+.filterBar {
+  /* flex: 1 1 auto; */
+  width: 200px;
+  margin-right: 10px;
+  /* flex-basis: 8% */
+  /* flex-grow: 4 */
+}
+
+.filterBar select {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+}
+
+
+
+/* .filterBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterSelect {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+} */

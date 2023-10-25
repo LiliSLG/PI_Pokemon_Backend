@@ -1,23 +1,21 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import style from "./Home.module.css";
-import { CardsContainer } from "../../components";
-import { getPokemons, getTypes } from "../../redux/actions";
+import { CardsContainer, Footer } from "../../components";
+import { handleSetFooterAppStatus } from "../../handlers/handleFooterMessages";
+// import { setAppStatus } from "../../redux/actions";
 
 const Home = () => {
   const dispatch = useDispatch();
-  // cuando se monta, hace el dispach de los pokemones y types
+
   useEffect(() => {
-    dispatch(getPokemons());
-    dispatch(getTypes());
-  }, [dispatch]);
-  
+    handleSetFooterAppStatus(dispatch, "READY", 1);
+  });
 
   return (
-    <>
-      <h1 className={style.home_title}>Vista Home</h1>
+    <div>
       <CardsContainer />
-    </>
+    </div>
   );
 };
 export default Home;

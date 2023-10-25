@@ -1,111 +1,173 @@
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import style from "./Detail.module.css";
 import { getPokemonById, pokemonDelete } from "../../redux/actions";
+import { ProgressBar } from "../../components/bars";
+import {
+  renderTypeLabels,
+  colorsByType,
+} from "../../helpers/pokemonColorsByType";
 
 const Detail = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const history = useHistory();
+  const { id } = useParams();
+  const pokemonDetail = useSelector((state) => state.pokemon.pokemonDetail);
+  const [refresh, setRefresh] = useState(false);
+
+  let colorType = pokemonDetail.types
+    ? colorsByType[pokemonDetail.types[0].name]
+    : "#000000";
+
+  // const [colorType, setColorType] = useState("#00b4db");
 
   useEffect(() => {
-    dispatch(getPokemonById(id));
-  }, []);
+    dispatch(getPokemonById(id)).then(() => {
+      // setColorType(colorsByType[pokemonDetail.types[0].name])
+      setRefresh(true);
+    });
+  }, [refresh]);
 
-  const pokemonDetails = useSelector((state) => state.pokemonDetail);
+  const handleClose = () => {
+    history.push("/home");
+  };
 
-const handleDelete = async (event) => {
-  event.preventDefault();
-  try {
-    const confirmed = window.confirm("Are you sure you want to delete this Pokemon?");
-    if (confirmed) {
-      await dispatch(pokemonDelete(id));
-      alert("Pokemon deleted!");
-      // <Link to="/home" />
+  const handleTypeClick = (event) => {
+    // const { alt } = event.target;
+    // if (alt) {
+    //   setColorType(colorsByType[alt]);
+    // }
+  };
+
+  const handleDelete = async (event) => {
+    event.preventDefault();
+    if (!pokemonDetail.created) {
+      alert("This Pokemon is from API and cant be deleted!");
+      return
     }
-  } catch (error) {
-    console.error(error);
-    alert("Something went wrong. Please try again later.");
-  }
-};
-
-  // const handleModify = (event) => {
-  //   event.preventDefault();
-  //   const goTo = `/update/${pokemonDetails.id}`;
-  //   return (<Navigate to={goTo}>);
-  // };
+    try {
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this Pokemon?"
+      );
+      if (confirmed) {
+        await dispatch(pokemonDelete(id));
+        alert("Pokemon deleted!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong. Please try again later.");
+    }
+  };
 
   return (
     <div>
-      <h1> Detalle de Pokemon</h1>
-      <div>
-        <p>{pokemonDetails.name}</p>
-      </div>
-      <div>
-        <div>
-          <img
-            src={pokemonDetails.image}
-            alt={`Imagen de ${pokemonDetails.name}`}
-          />
-        </div>
-        <label>
-          <input type="checkbox" checked={pokemonDetails.created} />
-          Created
-        </label>
-        <div>
-          <div>
-            <p>HP</p>
-            <p>{pokemonDetails.hp}</p>
+      {/* <h1 className={style.title}> Detalle de Pokemon</h1> */}
+      {refresh && (
+        <div className={style.card}>
+          <div className={style.leftPanel} style={{ backgroundColor: colorType }}>
+            <div>
+              <p className={style.titleName}>
+                {pokemonDetail.name.toUpperCase()}
+              </p>
+            </div>
+            <img
+              src={pokemonDetail.image}
+              alt={`Imagen de ${pokemonDetail.name}`}
+            />
           </div>
-          <div>
-            <p>HEIGHT</p>
-            <p>{pokemonDetails.height}</p>
-          </div>
-          <div>
-            <p>WEIGHT</p>
-            <p>{pokemonDetails.weight}</p>
-          </div>
-          <div>
-            <p>ATTACK</p>
-            <p>{pokemonDetails.attack}</p>
-          </div>
-          <div>
-            <p>DEFENSE</p>
-            <p>{pokemonDetails.defense}</p>
-          </div>
-          <div>
-            <p>SPEED</p>
-            <p>{pokemonDetails.speed}</p>
-          </div>
-        </div>
-        <div>
-          <p>TYPES</p>
-          <div>
-            {pokemonDetails.types?.map((type) => {
-              return <div key={type.id}>{type.name}</div>;
-            })}
-          </div>
-        </div>
-      </div>
-      <div>
-        <button
-          onClick={(e) => {
-            handleDelete(e);
-          }}
-        >
-          DELETE
-        </button>
-        <Link to={`/update/${pokemonDetails.id}`}>
-          <button
-            // onClick={(e) => {handleModify(e);} }
-          >
-            MODIFY
-          </button>
-        </Link>
-      </div>
 
+          <div className={style.rigthPanel}>
+            <button
+              id="buttonClose"
+              className={style.closeBtn}
+              onClick={handleClose}
+            >
+              ✖️
+            </button>
+            <div>
+              <p className={style.titleCard} style={{ color: colorType }}>
+                Detailed information about {pokemonDetail.name.toUpperCase()}
+              </p>
+            </div>
+            <div>
+              <div className={style.pesoAltura}>
+                <div>
+                  <p className={style.description}>HEIGHT</p>
+                  <p>↕️ {pokemonDetail.height} cm.</p>
+                </div>
+                <div>
+                  <p className={style.description}>WEIGHT</p>
+                  <p>🪨 {pokemonDetail.weight} gr.</p>
+                </div>
+              </div>
+              <div className={style.stats}>
+                {/* <p className={style.description}>STATS</p> */}
+                <div>
+                  <p className={style.description}>HP</p>
+                  <ProgressBar
+                    color={colorType}
+                    total={100}
+                    value={pokemonDetail.hp}
+                  />
+                </div>
+                <div>
+                  <p className={style.description}>ATTACK</p>
+                  <ProgressBar
+                    color={colorType}
+                    total={100}
+                    value={pokemonDetail.attack}
+                  />
+                </div>
+                <div>
+                  <p className={style.description}>DEFENSE</p>
+                  <ProgressBar
+                    color={colorType}
+                    total={100}
+                    value={pokemonDetail.defense}
+                  />
+                </div>
+                <div>
+                  <p className={style.description}>SPEED</p>
+                  <ProgressBar
+                    color={colorType}
+                    total={100}
+                    value={pokemonDetail.speed}
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <p className={style.description}>TYPES</p>
+              <div className={style.types}>
+                {renderTypeLabels(pokemonDetail, handleTypeClick)}
+              </div>
+            </div>
+            <div>
+              <button
+                className={style.btns}
+                style={{ backgroundColor: colorType }}
+                onClick={(e) => {
+                  handleDelete(e);
+                }}
+              >
+                DELETE
+              </button>
+              <Link to={`/update/${pokemonDetail.id}`}>
+                <button
+                  className={style.btns}
+                  style={{ backgroundColor: colorType }}
+                >
+                  MODIFY
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 export default Detail;
