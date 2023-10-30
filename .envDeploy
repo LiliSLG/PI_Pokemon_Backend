@@ -1,7 +1,7 @@
 DB_USER=fl0user
 DB_PASSWORD=KdQaqVxu9h1N
-DB_HOST=ep-polished-haze-56223027.us-east-2.aws.neon.fl0.io
 DB_NAME=pokemon
 DB_PORT=5432
+DB_HOST=ep-polished-haze-56223027.us-east-2.aws.neon.fl0.io
 PORT=3001
 API_URL=https://pokeapi.co/api/v2/

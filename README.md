@@ -267,6 +267,12 @@ git push
 
 back:
 npm i nodemon sequelize pg postgres ... ver package.json
+Below step resolve my npm registry issue. I hope same will be work for you.
+
+Try to set npm registry using : npm config set registry https://registry.npmjs.org/
+Check result of curl https://registry.npmjs.org/
+Clear the cache: npm cache clean --force
+Try to run npm install
 
 front:
 npm react react-scripts
