@@ -8,9 +8,10 @@ import "./index.css";
 import App from "./App";
 
 import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
+// import dotenv from "dotenv";
+// dotenv.config();
 //SEGUN ESTE TRABAJANDO EN MI COMPU O DEPLOY
+const APIURL=null;
 axios.defaults.baseURL = process.env.APIURL || "http://localhost:3001";
 
 
