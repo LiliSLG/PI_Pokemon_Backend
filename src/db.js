@@ -3,15 +3,29 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
+
 //postgres://fl0user:KdQaqVxu9h1N@ep-polished-haze-56223027.us-east-2.aws.neon.fl0.io:5432/pokemon?sslmode=require
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/pokemon`,
   {
+    dialectOptions: {
+      ssl: {
+        require: true, //habilitar certificado de seguridad
+        rejectUnauthorized: false, //para evitar errores de certificado
+      },
+    },
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
   }
 );
+
+// servidor local
+// const sequelize = new Sequelize(
+//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+//   { logging: false, native: false }
+// );
+
 const basename = path.basename(__filename);
 
 const modelDefiners = []; 
