@@ -269,7 +269,7 @@ back:
 npm i nodemon sequelize pg postgres ... ver package.json
 
 front:
-npm react 
+npm react react-scripts
 
 npm install --save-dev jest supertest (para que se instale como dependencia)
 si quiero desinstalar: npm uninstall jest supertest
