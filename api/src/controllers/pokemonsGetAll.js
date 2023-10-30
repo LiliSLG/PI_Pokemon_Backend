@@ -63,28 +63,54 @@ const pokemonsGetAll = async (getFromAPI, page, pageSize) => {
   let pokemonsMappedAPI = [];
   let pokemonsMappedDB = [];
   let allPokemons = [];
+  let uniquePokemons = [];
   let totalPokemonsDB = 0;
-  let totalPokemonsAPI = 0;
+  let totalPokemonsAPI = 0; 
 
-  if (getFromAPI === "true") {//por params viene como string
+  //por params viene como string
+  if (getFromAPI === "true") {
+    //busco solo en la api
     pokemonsMappedAPI = await getPokemonFromAPI(page, pageSize);
     allPokemons = [...pokemonsMappedAPI.pokemons];
   } else {
     [pokemonsMappedDB, pokemonsMappedAPI] = await Promise.all([
       getPokemonFromBD(page, pageSize),
       getPokemonFromAPI(page, pageSize),
-    ]);
-    totalPokemonsDB = pokemonsMappedDB.totalPokemons;
-    totalPokemonsAPI = pokemonsMappedAPI.totalPokemons;
-    allPokemons = [...pokemonsMappedDB.pokemons, ...pokemonsMappedAPI.pokemons];
+    ]).catch((error) => console.warn(`Error en API o DB${error}`));
+
+    totalPokemonsDB = pokemonsMappedDB.totalPokemons
+      ? pokemonsMappedDB.totalPokemons
+      : 0;
+    totalPokemonsAPI = pokemonsMappedAPI.totalPokemons
+      ? pokemonsMappedAPI.totalPokemons
+      : 0;
+    //no cargo los pokemons de la api que ya tengo guardados en la base de datos
+
+    if (totalPokemonsDB === 0) {
+      uniquePokemons = [...pokemonsMappedAPI.pokemons];
+    } else if (totalPokemonsAPI === 0) {
+      uniquePokemons = [...pokemonsMappedDB.pokemons];
+    } else {
+      uniquePokemons = [
+        ...pokemonsMappedDB.pokemons,
+        ...pokemonsMappedAPI.pokemons.filter(
+          (apiPokemons) =>
+            !pokemonsMappedDB.pokemons.find(
+              (pokemons) => pokemons.idAPI === apiPokemons.id
+            )
+        ),
+      ];
+    }
+
+    allPokemons = [...uniquePokemons];
   }
 
   allPokemons.sort((a, b) => a.name.localeCompare(b.name));
 
   return {
     pokemons: [...allPokemons],
-    totalPokemonsDB,
-    totalPokemonsAPI,
+    totalPokemonsDB: totalPokemonsDB,
+    totalPokemonsAPI: totalPokemonsAPI,
   };
 };
 

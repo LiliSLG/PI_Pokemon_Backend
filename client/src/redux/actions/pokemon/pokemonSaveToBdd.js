@@ -15,7 +15,6 @@ export const pokemonSaveToBdd = (pokemon) => {
       const newPokemon = (await axios.post(URL_API, {
         ...pokemon,
         types: types,
-        idAPI: id,
       })).data;
       dispatch({
         type: actionTypes.POST_POKEMON_FROM_API,

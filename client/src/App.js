@@ -23,9 +23,9 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="App">
-      <h1>Henry Pokemon</h1>
-      {location.pathname !== "/" && <NavBar />}
+    <div className="App">      
+      {/* <h1>Henry Pokemon</h1> */}
+      {location.pathname !== "/" && (<NavBar />)}
       {location.pathname !== "/" && <FooterBar />}
       <Route exact path="/" component={LandingPage} />
       <Route path="/home" render={() => <Home />} />

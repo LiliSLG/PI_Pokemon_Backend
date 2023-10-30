@@ -3,7 +3,11 @@ import { Link, useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import style from "./Detail.module.css";
-import { getPokemonById, pokemonDelete } from "../../redux/actions";
+import {
+  getPokemonById,
+  pokemonDelete,
+  pokemonClear,
+} from "../../redux/actions";
 import { ProgressBar } from "../../components/bars";
 import {
   renderTypeLabels,
@@ -28,7 +32,10 @@ const Detail = () => {
       // setColorType(colorsByType[pokemonDetail.types[0].name])
       setRefresh(true);
     });
-  }, [refresh]);
+    // return () => {
+    //   dispatch(pokemonClear());
+    // }
+  }, []);
 
   const handleClose = () => {
     history.push("/home");
@@ -47,19 +54,19 @@ const Detail = () => {
       alert("This Pokemon is from API and cant be deleted!");
       return;
     }
-    try {
-      const confirmed = window.confirm(
-        "Are you sure you want to delete this Pokemon?"
-      );
-      if (confirmed) {
-        dispatch(pokemonDelete(id));
-        alert("Pokemon deleted!");
-        handleClose()
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong. Please try again later.");
+    // try {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this Pokemon?"
+    );
+    if (confirmed) {
+      dispatch(pokemonDelete(id));
+      alert("Pokemon deleted!");
+      handleClose();
     }
+    // } catch (error) {
+    //   console.error(error);
+    //   alert("Something went wrong. Please try again later.");
+    // }
   };
 
   return (
@@ -83,13 +90,15 @@ const Detail = () => {
           </div>
 
           <div className={style.rigthPanel}>
-            <button
-              id="buttonClose"
-              className={style.closeBtn}
-              onClick={handleClose}
-            >
-              ✖️
-            </button>
+            <div className={style.closeContainer} >
+              <button
+                id="buttonClose"
+                className={style.closeBtn}
+                onClick={handleClose}
+              >
+                ✖️
+              </button>
+            </div>
             <div>
               <p className={style.titleCard} style={{ color: colorType }}>
                 Detailed information about {pokemonDetail.name.toUpperCase()}
@@ -109,7 +118,7 @@ const Detail = () => {
               <div className={style.stats}>
                 {/* <p className={style.description}>STATS</p> */}
                 <div>
-                  <p className={style.description}>HP</p>
+                  <p className={style.description}>HIT POINTS</p>
                   <ProgressBar
                     color={colorType}
                     total={100}

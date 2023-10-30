@@ -50,9 +50,9 @@ export const renderTypeLabels = (pokemon, handleOnClick) => {
         }}
         onClick={handleOnClick}
       >
-        <p style={{ fontSize: "12px", color: "white", marginTop: "10px" }}>
+        <span style={{ fontSize: "12px", color: "white", marginTop: "10px" }}>
           {type.name.toUpperCase()}
-        </p>
+        </span>
       </div>
     ))
   ) : (

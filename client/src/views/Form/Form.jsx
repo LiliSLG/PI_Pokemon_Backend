@@ -45,17 +45,15 @@ const Form = () => {
     }
   }, []);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const types = form.types.map((type) => type.id);
     form.types = types;
     try {
       if (isCreateForm) {
-        await dispatch(createPokemon(form));
-        alert("New Pokemon created!");
+        dispatch(createPokemon(form)).then(alert("New Pokemon created!"));
       } else {
-        await dispatch(updatePokemon(form));
-        alert("Pokemon updated!");
+        dispatch(updatePokemon(form)).then(alert("Pokemon updated!"));
       }
       setForm(initialFormState);
       history.push("/home");
@@ -139,13 +137,15 @@ const Form = () => {
       </div>
 
       <div className={style.rigthPanel}>
-        <button
-          id="buttonClose"
-          className={style.closeBtn}
-          onClick={handleClose}
-        >
-          ✖️
-        </button>
+        <div className={style.closeContainer}>
+          <button
+            id="buttonClose"
+            className={style.closeBtn}
+            onClick={handleClose}
+          >
+            ✖️
+          </button>
+        </div>
         <div>
           {isCreateForm ? (
             <h1
@@ -200,7 +200,7 @@ const Form = () => {
         <div className={style.pesoAltura}>
           <div>
             <label className={style.description} htmlFor="height">
-              HEIGHT
+              HEIGHT ↕️
             </label>
             <input
               class={style.inputPesoAltura}
@@ -221,7 +221,7 @@ const Form = () => {
           </div>
           <div>
             <label className={style.description} htmlFor="weight">
-              WEIGHT
+              WEIGHT 🪨
             </label>
             <input
               class={style.inputPesoAltura}
@@ -244,7 +244,7 @@ const Form = () => {
         <div className={style.stats}>
           <div>
             <label className={style.description} htmlFor="hp">
-              HP
+              HIT POINTS
             </label>
             <input
               name="hp"

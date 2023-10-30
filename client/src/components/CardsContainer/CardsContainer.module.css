@@ -20,40 +20,12 @@
   /* margin-bottom: 10px; */
 }
 
-.navsContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.navsContainer > * {
-  margin-right: 10px; /* Ajusta el margen derecho entre los componentes según sea necesario */
-}
-
-.filtersContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex: 1 1 auto;
-  /* border: 1px solid rgb(172, 18, 18); */
-}
-
-.searchContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex: 1 1 auto;
-  /* border: 1px solid rgb(172, 18, 18); */
-}
 
 
-.createButton {
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
+.espacioFooter {
+  height: 100px;
+  left: 0;
+  bottom: 0;
 }
 
 /* Estilos adicionales para hacer los componentes responsivos */
@@ -61,9 +33,4 @@
   .navsContainer {
     flex-direction: column;
   }
-}
-.espacioFooter {
-  height: 100px;
-  left: 0;
-  bottom: 0;
 }

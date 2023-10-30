@@ -1,7 +1,7 @@
 const { Pokemon, Type } = require("../db");
 const axios = require("axios");
 require("dotenv").config();
-const { pokemonMapFromAPI, pokemonMapFromDB } = require("../utils/mapPokemons");
+const { pokemonMapDetailFromAPI, pokemonMapDetailFromDB } = require("../utils/mapPokemons");
 const { API_URL } = process.env;
 
 const pokemonGetById = async (id, source) => {
@@ -15,8 +15,8 @@ const pokemonGetById = async (id, source) => {
           },
         });
   return source === "api"
-    ? pokemonMapFromAPI([pokemon])[0]
-    : pokemonMapFromDB([pokemon])[0];
+    ? pokemonMapDetailFromAPI([pokemon])[0]
+    : pokemonMapDetailFromDB([pokemon])[0];
 };
 
 module.exports = { pokemonGetById };

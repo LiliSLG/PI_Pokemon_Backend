@@ -15,9 +15,13 @@ const pokemonPut = async (
   TypeIds
 ) => {
   const pokemonToUpdate = await Pokemon.findByPk(id);
-  if (!pokemonToUpdate) return res.sendStatus(404);
+  if (!pokemonToUpdate) {
+    return res.sendStatus(404);
+  }
+  
   await pokemonToUpdate.setTypes(TypeIds);
-  const updatedPokemon = await pokemonToUpdate.update({
+  
+  const updatedFields = {
     idAPI,
     name,
     height,
@@ -27,18 +31,15 @@ const pokemonPut = async (
     attack,
     defense,
     speed,
+  };
+  await pokemonToUpdate.update(updatedFields);
+
+  const updatedPokemon = await Pokemon.findByPk(id, {
+    include: {
+      model: Type,
+      attributes: ["name"],
+    },
   });
-
-  //verrr como modififar los types del user
-  // await updatedPokemon.removeTypes(TypeIds);
-  // await updatedPokemon.addType(TypeIds);
-
-  // const updatedPokemon = await Pokemon.findByPk(newPokemon.id, {
-  //   include: {
-  //     model: Type,
-  //     attributes: ["name"],
-  //   },
-  // });
 
   return pokemonMapFromDB([updatedPokemon])[0];
 };

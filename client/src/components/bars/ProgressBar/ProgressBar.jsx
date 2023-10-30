@@ -11,7 +11,7 @@ const ProgressBar = ({ color, total, value }) => {
         className={style.progressBar__progress}
         style={{ backgroundColor: color, width: `${progress}%` }}
       >
-        <span className={style.progressBar__text}>{`${progress.toFixed(0)} %`}</span>
+        <span className={style.progressBar__text}>{`${progress.toFixed(0)} `}</span>
       </div>
     </div>
   );

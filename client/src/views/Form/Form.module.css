@@ -18,10 +18,12 @@ body {
 }
 
 .leftPanel {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  /* display: grid;*/
   justify-content: center;
   align-items: center;
-  width: 330px;
+  width: 45%;
   height: 100%;
   transition: 0.5s;
   background-color: aqua;
@@ -33,31 +35,76 @@ body {
   width: 90%;
   transition: 400ms;
   filter: drop-shadow(5px -4px 10px rgba(0, 0, 0, 0.5));
+  margin-top: 15px;
 }
 
 .leftPanel:hover img {
   transform: rotate(-15deg);
 }
 
+.titleName {
+  font-size: 30px;
+  /* font-weight: lighter; */
+  color: white;
+}
+
+.rigthPanel {
+  display: grid;
+  height: 100%;
+  /* background-color: rgb(214, 226, 43); */
+  /* align-items: center;*/
+  justify-content: center;
+  width: 55%;
+  padding: 2rem;
+}
+
+.closeContainer {
+  display: flex;
+  align-items: center;
+  height: 23px;
+  /* background-color: #007bff; */
+  justify-content: flex-end;
+}
+
+.closeBtn {
+  height: 23px;
+  width: 23px;
+  border: none;
+  background-color: none;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
 .pesoAltura {
   display: flex;
-  flex-wrap: wrap;
-  margin-left: 10px;
-  margin-right: 10px;
   justify-content: center;
+  margin-top: 10px;
+  /* flex-wrap: wrap; */
+  /* margin-left: 10px;
+  margin-right: 10px; */
 }
 
 .inputPesoAltura {
   width: 50px;
 }
-.rigthPanel {
-  display: grid;
-  height: 100%;
-  /* background-color: rgb(214, 226, 43); */
-  align-items: center;
+
+.stats {
+  display: flex;
+  align-items: space-around;
+  margin-top: 10px;
+
+  /* margin-left: 50px; */
+}
+
+.types {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px 5px 5px 5px;
   justify-content: center;
-  width: 370px;
-  padding: 2rem;
+  font-size: 12px;
+
+  /* cursor: pointer; */
 }
 
 .rigthPanel p {
@@ -69,7 +116,7 @@ body {
 .titleCard {
   font-size: 22px;
   font-weight: 200;
-  color: blue;
+  color: #00b4db;
 }
 
 .title {
@@ -78,20 +125,15 @@ body {
   color: rgb(50, 50, 50);
 }
 
-.titleName {
-  font-size: 32px;
-  /* font-weight: bold; */
-  color: white;
-}
-
 .description {
   font-size: 13px;
-  /* display: flex; */
-  /* flex-wrap: wrap; */
-  /* width: 320px; */
   color: rgb(50, 50, 50);
   margin: 5px 5px 5px 5px;
   padding: 5px;
+
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  /* width: 320px; */
 }
 
 .card__info {
@@ -99,25 +141,9 @@ body {
   font-size: 14px;
 }
 
-.stats {
-  display: flex;
-  align-items: space-around;
-  
-  /* margin-left: 50px; */
-}
-
-.types {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 5px 5px 5px 5px;
-  justify-content: center;
-  font-size: 12px;
-  /* cursor: pointer; */
-}
-
 .labelTypes {
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #00b4db;
   color: #fff;
   border: none;
   border-radius: 20%;
@@ -144,7 +170,7 @@ body {
 
 .btns {
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #00b4db;
   color: #fff;
   border: none;
   border-radius: 3px;
@@ -161,17 +187,4 @@ body {
   border-radius: 3px;
   margin-top: 10px;
   margin-left: 5px;
-}
-.closeBtn {
-  height: 23px;
-  width: 23px;
-  position: absolute;
-  top: 130px;
-  /* no se como poner esto: */
-  left: 1050px;
-  border: none;
-  background-color: none;
-  &:hover {
-    transform: scale(1.2);
-  }
 }

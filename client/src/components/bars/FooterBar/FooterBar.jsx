@@ -7,26 +7,35 @@ const Footer = () => {
   const location = useLocation();
   const currentPage = location.pathname;
   const appStatus = useSelector((state) => state.messageFooter.appStatus);
-  const messages = useSelector((state) => state.messageFooter.messages);
-  const [reduxDescription, setReduxDescription] = useState(
-    appStatus.Description
+  // const messages = useSelector((state) => state.messageFooter.messages);
+
+  const totalPokemonsState = useSelector(
+    (state) => state.pokemon.pokemons.length
   );
-  const [reduxStatus, setReduxStatus] = useState(appStatus.status);
-  const [poksDB, setpoksDB] = useState(0);
-  const [poksState, setpoksState] = useState(0);
+  const totalPokemonsAPI = useSelector(
+    (state) => state.pokemon.pagination.totalPokemonsAPI
+  );
+  const totalPokemonsDB = useSelector(
+    (state) => state.pokemon.pagination.totalPokemonsDB
+  );
+
+  const totalPokemonsFilter = useSelector(
+    (state) => state.pokemon.filteredPokemons.length
+  );
+  // const [poksState, setpoksState] = useState(0);
   const [poksFiltered, setPoksFiltered] = useState(0);
-  
+
   const playErrorSound = () => {
     const audio = new Audio("system:alert");
     audio.play();
   };
 
   const renderMessage = (message, index) => {
-    if ((message.owner === currentPage) && (message.visible === true))
+    if (message.owner === currentPage && message.visible === true)
       return (
         <div key={index} className={style.footer_section}>
           <p className={getMessageClass(message.level)}>
-            {message.icon} {message.description}: {message.value} 
+            {message.icon} {message.description}: {message.value}
           </p>
         </div>
       );
@@ -34,34 +43,58 @@ const Footer = () => {
 
   //no puedo acualizar el estado con los valores del registro, por eso lo hago a mano
   //pero no corresponde al componente footer
-  const updatePokemonsValues = () => {
-    if (messages.length >0) {
-      setpoksDB(messages[1].value); //db
-      setpoksState(messages[2].value); //estado
-      setPoksFiltered(messages[3].value); //filtrado
-    }
-  };
+  // const updatePokemonsValues = () => {
+  //   if (messages.length > 0) {
+  //     setpoksDB(messages[1].value); //db
+  //     setpoksState(messages[2].value); //estado
+  //     setPoksFiltered(messages[3].value); //filtrado
+  //   }
+  // };
 
-  useEffect(() => {
-    setReduxDescription(appStatus.description);
-    setReduxStatus(appStatus.status);
-    updatePokemonsValues();
-    if (appStatus.status === 3) {
-      playErrorSound();
-    }
-  }, [appStatus.status, appStatus.description, poksDB,poksState,poksFiltered]);
+  // useEffect(() => {
+  //   setReduxDescription(appStatus.description);
+  //   setReduxStatus(appStatus.status);
+  //   // updatePokemonsValues();
+  //   if (appStatus.status === 3) {
+  //     playErrorSound();
+  //   }
+  // }, [
+  //   appStatus.status,
+  //   appStatus.description,
+  // ]);
 
   return (
     <footer className={style.footer}>
-      <div className={style.container}>
-        <div className={style.footer_nameSection}>
-          <p>Pokemon APP Status</p>
+      {/* <div className={style.footer_nameSection}>
+        <p>Pokemon APP Status</p>
+      </div> */}
+      <div className={style.poksStatus}>
+        {/* <span> Pokemons status: </span> */}
+        <div className={style.footer_nameSection}>Pokemon SPA Status</div>
+        <div className={style.footer_section}>
+          <span>⚙️ API: {totalPokemonsAPI}</span>
         </div>
-        {/* <div className={style.footer_section}>
-          <p>{currentPage}</p>
-        </div> */}
-        {messages.length > 0 && messages.map(renderMessage)}
+        <div className={style.footer_section}>
+          <span>⚙️ DB: {totalPokemonsDB}</span>
+        </div>
+        <div className={style.footer_section}>
+          <span>⚙️ State: {totalPokemonsState}</span>
+        </div>
+        <div className={style.footer_section}>
+          <span>⚙️ Filter: {totalPokemonsFilter}</span>
+        </div>
         <div className={style.footer_statusSection}>
+          <p className={getStatusClass(appStatus.status)}>
+            {appStatus.description
+              ? appStatus.description.length < 35
+                ? appStatus.description
+                : appStatus.description.substring(0, 35) + "..."
+              : ""}
+          </p>
+        </div>
+      </div>
+      {/* {messages.length > 0 && messages.map(renderMessage)} */}
+      {/* <div className={style.footer_statusSection}>
           <p className={getStatusClass(reduxStatus)}>
             {reduxDescription
               ? reduxDescription.length < 25
@@ -69,8 +102,7 @@ const Footer = () => {
                 : reduxDescription.substring(1, 25) + "..."
               : ""}
           </p>
-        </div>
-      </div>
+        </div> */}
     </footer>
   );
 };

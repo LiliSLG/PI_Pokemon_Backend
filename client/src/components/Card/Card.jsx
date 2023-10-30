@@ -17,11 +17,11 @@ const Card = (props) => {
   };
 
   const handleSaveToBdd = (id) => {
-    try {
-      dispatch(pokemonSaveToBdd(id));
-    } catch (error) {
-      alert("Something went wrong. Please try again later.");
-    }
+    // try {
+    dispatch(pokemonSaveToBdd(id));
+    // } catch (error) {
+    //   alert("Something went wrong. Please try again later.");
+    // }
   };
 
   const renderTypes = () => {
@@ -63,9 +63,15 @@ const Card = (props) => {
               ✖️
             </button>
             {pokemon.created ? (
-              <button id="buttonSave" className={style.saveFavorite}>
-                ❤️
-              </button>
+              pokemon.idAPI ? (
+                <button id="buttonSave" className={style.saveFavorite}>
+                  💚
+                </button>
+              ) : (
+                <button id="buttonSave" className={style.saveFavorite}>
+                  ❤️
+                </button>
+              )
             ) : (
               <button
                 id="buttonSave"
@@ -84,7 +90,7 @@ const Card = (props) => {
             <div>{renderTypes()}</div>
             {pokemon.created ? (
               pokemon.idAPI ? (
-                <p>Imported from API</p>
+                <p>Copied from API</p>
               ) : (
                 <p>Created</p>
               )

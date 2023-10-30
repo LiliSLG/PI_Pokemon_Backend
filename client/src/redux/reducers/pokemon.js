@@ -3,7 +3,8 @@ import { actionTypes } from "../action-types";
 const initialState = {
   pokemons: [],
   pokemonDetail: {},
-  lastPokemonFromAPI: [],
+  filteredPokemons: [],
+  filter: {}, //filterByName: "", filterByOrigin: ""
   types: [],
   pagination: {
     totalPokemonsDB: 0,
@@ -26,6 +27,7 @@ const pokemon = (state = initialState, action) => {
       return {
         ...state,
         pokemons: newPokemons,
+        filteredPokemons: newPokemons,
         pagination: {
           ...state.pagination,
           currentPageNumberAPI,
@@ -43,7 +45,7 @@ const pokemon = (state = initialState, action) => {
         ...pokemons,
         ...newAPIPokemons.filter(
           (newAPIPokemons) =>
-            !pokemons.find((pokemons) => pokemons.id === newAPIPokemons.id)
+            !pokemons.find((pokemons) => pokemons.idAPI === newAPIPokemons.id)
         ),
       ];
       newAPIPokemons.push(...action.payload.pokemons);
@@ -51,7 +53,7 @@ const pokemon = (state = initialState, action) => {
       return {
         ...state,
         pokemons: uniquePokemons,
-        lastPokemonFromAPI: [...action.payload.pokemons],
+        filteredPokemons: [...action.payload.pokemons],
       };
     }
 
@@ -66,25 +68,23 @@ const pokemon = (state = initialState, action) => {
       if (!foundPokemon) {
         return {
           ...state,
-          pokemonDetail: action.payload,
-          pokemons: [...state.pokemons, action.payload],
+          filteredPokemons: action.payload,
+          pokemons: [...state.pokemons, ...action.payload],
         };
       } else {
         return {
           ...state,
           pokemonDetail: action.payload,
-          pagination: {
-            ...state.pagination,
-            totalPokemonsDB: state.pagination.totalPokemonsDB + 1,
-          },
         };
       }
     }
+
     case actionTypes.POST_POKEMON:
       return {
         ...state,
-        pokemonDetail: action.payload,
-        pokemons: [...state.pokemons, action.payload],
+        pokemonDetail: action.payload.newPokemon[0],
+        pokemons: [...action.payload.newPokemon, ...state.pokemons],
+        filteredPokemons: [...action.payload.newPokemon, ...state.pokemons],
         pagination: {
           ...state.pagination,
           totalPokemonsDB: state.pagination.totalPokemonsDB + 1,
@@ -92,56 +92,79 @@ const pokemon = (state = initialState, action) => {
       };
 
     case actionTypes.PUT_POKEMON: {
-      //saco del estado el pokemon que se quiere actualizar, y lo agrego actualizado
-      const filteredPokemons = state.pokemons.filter(
-        (pokemon) => pokemon.id !== action.payload.id
+      const updatedPokemonIndex = state.pokemons.findIndex(
+        (pokemon) => pokemon.id === action.payload.id
       );
-      filteredPokemons.sort((a, b) => a.name.localeCompare(b.name)); //ordeno por si modificaron el nombre
+
+      if (updatedPokemonIndex !== -1) {
+        state.pokemons[updatedPokemonIndex] = action.payload;
+      }
       return {
         ...state,
         pokemonDetail: action.payload,
-        pokemons: [...filteredPokemons, action.payload],
+        // pokemons: [...filtered],
       };
     }
 
     case actionTypes.DEL_POKEMON: {
       //saco el que borramos, seguro esta en el estado
-      const filteredPokemons = state.pokemons.filter(
+      const filtered = state.pokemons.filter(
         (pokemon) => pokemon.id !== action.payload
       );
       return {
         ...state,
         pokemonDetail: {},
-        pokemons: [...filteredPokemons],
+        pokemons: [...filtered],
+        filteredPokemons: [...filtered],
         pagination: {
           ...state.pagination,
           totalPokemonsDB: state.pagination.totalPokemonsDB - 1,
         },
       };
     }
+
     case actionTypes.CLOSE_POKEMON: {
       //saco el que borramos, seguro esta en el estado
-      const filteredPokemons = state.pokemons.filter(
+      const filtered = state.pokemons.filter(
         (pokemon) => pokemon.id !== action.payload
       );
       return {
         ...state,
-        pokemons: [...filteredPokemons],
+        pokemons: [...filtered],
+        filteredPokemons: [...filtered],
       };
     }
+
+    case actionTypes.CLEAR_POKEMON: {
+      return {
+        ...state,
+        pokemonDetail: {},
+      };
+    }
+
     case actionTypes.POST_POKEMON_FROM_API: {
       //busco el poke con el numrero de API par sacarlo
       //agrego el nuevo poke guardado en la bdd
-      const filteredPokemons = state.pokemons.filter(
-        (pokemon) => pokemon.id !== action.payload.idAPI
+      const updatedPokemonIndex = state.pokemons.findIndex(
+        (pokemon) => pokemon.id === action.payload.id
       );
-      filteredPokemons.push(action.payload.pokemons);
-      filteredPokemons.sort((a, b) => a.name.localeCompare(b.name));
+
+      if (updatedPokemonIndex !== -1) {
+        state.pokemons[updatedPokemonIndex] = action.payload.pokemons;
+      }
+      // const filtered = state.pokemons.filter(
+      //   (pokemon) => pokemon.id !== action.payload.idAPI
+      // );
+      // filtered.push(action.payload.pokemons);
+      // filtered.sort((a, b) => a.name.localeCompare(b.name));
       return {
         ...state,
-        pokemons: filteredPokemons,
+        // pokemons: [...filtered],
+        filteredPokemons: [...state.pokemons],
+        pokemonDetail: action.payload.pokemons,
       };
     }
+
     case actionTypes.SET_USER_PAGINATION_DATA: {
       const { pageNumber, pokemonsPerPage } = action.payload;
       return {
@@ -161,6 +184,97 @@ const pokemon = (state = initialState, action) => {
       return {
         ...state,
         pagination: { ...state.pagination, pageNumber, pokemonsPerPage },
+      };
+    }
+
+    case actionTypes.APPLY_FILTERS: {
+      let filtros = { ...state.filter };
+      const filter = action.payload.filter;
+      const value = action.payload.value;
+      if (value !== "all") filtros[filter] = value;
+      else delete filtros[filter]; //borro el filtro
+
+      let filteredPoks = state.pokemons;
+
+      if (filtros.filterByName) {
+        filteredPoks = filteredPoks.filter((pokemon) =>
+          pokemon.name
+            .toLowerCase()
+            .includes(filtros.filterByName.toLowerCase())
+        );
+      }
+
+      if (filtros.filterByOrigin) {
+        switch (filtros.filterByOrigin) {
+          case "bdd": {
+            filteredPoks = filteredPoks.filter(
+              (pokemon) => pokemon.created && !pokemon.idAPI
+            );
+            break;
+          }
+          case "api": {
+            filteredPoks = filteredPoks.filter((pokemon) => !pokemon.created);
+            break;
+          }
+          case "copy": {
+            filteredPoks = filteredPoks.filter(
+              (pokemon) => pokemon.created && pokemon.idAPI
+            );
+            break;
+          }
+        }
+      }
+
+      if (filtros.filterByType) {
+        filteredPoks = filteredPoks.filter((pokemon) =>
+          pokemon.types.includes(filtros.filterByType)
+        );
+      }
+
+      if (filtros.orderByName) {
+        if (filtros.orderByName === "D")
+          filteredPoks.sort((a, b) => a.name.localeCompare(b.name));
+        else filteredPoks.sort((a, b) => b.name.localeCompare(a.name));
+      }
+      return {
+        ...state,
+        filter: filtros,
+        filteredPokemons: [...filteredPoks],
+      };
+    }
+
+    case actionTypes.APPLY_MULTIPLE_FILTERS: {
+      let filtros = { ...state.filter };
+      const { filterByX, filterByXoperator, filterByXvalue } = action.payload;
+
+      filtros["filterBy" + filterByX] =
+        filterByXoperator + " " + filterByXvalue;
+
+      let filteredPoks = state.pokemons;
+      const strFunction =
+        "(pokemon) => pokemon." +
+        filterByX +
+        " " +
+        filterByXoperator +
+        " " +
+        filterByXvalue;
+
+      // const newFilter = new Function(strFunction);
+
+      filteredPoks = filteredPoks.filter(eval(strFunction));
+
+      return {
+        ...state,
+        filter: filtros,
+        filteredPokemons: [...filteredPoks],
+      };
+    }
+
+    case actionTypes.CLEAR_FILTERS: {
+      return {
+        ...state,
+        filter: {},
+        filteredPokemons: [...state.pokemons],
       };
     }
 

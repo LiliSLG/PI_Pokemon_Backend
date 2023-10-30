@@ -1,70 +1,76 @@
 .footer {
   /* background-color: #f8f8f8;
-    padding: 20px 0;
     text-align: center; */
+  display: flex;
   font-size: 10px;
   background-color: #f8f8f8;
-  /* justify-content: center; */
-  padding: 10px 0;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px;
   text-align: center;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
-  font-size: x-small;
+  font-size: 12px;
+  z-index: 2;
 }
 
-.container {
-  /* max-width: 1200px;
-    margin: 0 auto; */
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  /* grid-template-columns: 1fr 1fr; */
-  gap: 20px;
-}
-
-.footer p {
+/* .footer p span {
   margin: 0;
-}
+} */
 
 .footer_nameSection {
-  width: 20%;
   border-width: 1px;
   border-style: solid;
   border-color: rgb(200, 194, 194);
   padding-left: 10px;
   padding-right: 10px;
-  align-self: flex-start;
+  text-align: center;
+  /* align-self: flex-start; */
 }
+
 .footer_section {
-  width: 15%;
+  /* width: 15%; */
   /* border-width: 1px;
   border-style: solid;
   border-color: rgb(200, 194, 194); */
+  text-align: left;
   padding-left: 10px;
   padding-right: 10px;
-  font-size: 8px;
 }
 
 .footer_statusSection {
-  width: auto;
+  width: fit-content;
   padding-left: 10px;
   padding-right: 10px;
-  align-self: flex-end;
+  text-align: left;
+  /* align-self: flex-end; */
 }
+
+.poksStatus {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr 3fr;
+  background-color: rgb(216, 226, 238);
+  padding: 5px;
+}
+
 .highlight {
+  width: fit-content;
   color: red;
 }
 
 .warning {
+  width: fit-content;
   color: rgb(255, 157, 0);
 }
 
 .done {
+  width: fit-content;
   color: rgb(11, 231, 102);
 }
 
 .inProgress {
+  width: fit-content;
   color: rgb(255, 157, 0);
 }

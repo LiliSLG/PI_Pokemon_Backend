@@ -8,6 +8,8 @@ import { updatePokemon } from "./pokemon/pokemonUpdate";
 import { pokemonDelete } from "./pokemon/pokemonDelete";
 //cierre de card
 import { pokemonClose } from "./pokemon/pokemonClose";
+//clear detail
+import { pokemonClear } from "./pokemon/pokemonClear";
 //pokemons get
 import {
   getPokemons,
@@ -15,6 +17,15 @@ import {
   getPokemonByName,
   getPokemonsFromLocalStore,
 } from "./pokemon/pokemonGet";
+
+//filtros
+import {
+  pokemonApplyFilters,
+  pokemonApplyMultipleFilters,
+  resetFilters,
+} from "./pokemon/pokemonFilter.js";
+
+import { pokemonSort } from "./pokemon/pokemonSort";
 
 //types
 import { getTypes, getTypesFromLocalStore } from "./types";
@@ -29,6 +40,7 @@ import {
 } from "./messageFooter";
 
 export {
+  pokemonClear,
   pokemonClose,
   pokemonSaveToBdd,
   createPokemon,
@@ -37,6 +49,10 @@ export {
   getPokemons,
   getPokemonById,
   getPokemonByName,
+  pokemonSort,
+  pokemonApplyFilters,
+  pokemonApplyMultipleFilters,
+  resetFilters,
   getTypes,
   setAppStatus,
   updateAppStatus,

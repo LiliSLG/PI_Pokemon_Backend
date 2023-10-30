@@ -17,7 +17,7 @@ export const updatePokemon = (pokemon) => {
         type: actionTypes.PUT_POKEMON,
         payload: updatedPokemon.updatedPokemon,
       });
-      handleSetFooterAppStatus(dispatch, "POKEMON UPDATED" + pokemon.name, 1);
+      handleSetFooterAppStatus(dispatch, "POKEMON UPDATED " + pokemon.name, 1);
     } catch (error) {
       handleSetFooterAppStatus(
         dispatch,

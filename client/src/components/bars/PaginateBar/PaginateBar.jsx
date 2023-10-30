@@ -1,44 +1,28 @@
-// import React from "react";
-import { useEffect, useState } from "react";
 import style from "./PaginateBar.module.css";
 
 const PaginateBar = (props) => {
-  const { cardsPerPage, cardsTotal, paginated } = props;
+  const { currentPage, cardsPerPage, cardsTotal, handleOriginPaginate } = props;
 
-  // const totalPages = Math.ceil(cardsTotal / cardsPerPage);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageNumbers, setPageNumbers] = useState([]);
-
-  useEffect(() => {
-    setPageNumbers(handlePageNumbers(1));
-  }, []);
-
-  // useEffect(() => {
-  //   if (pageNumbersArray.length === 0) {
-  //     handlePageNumbers(1);
-  //     setPageNumbers([...pageNumbersArray]);
-  //   }
-  // }, [pageNumbers]);
-
-  function handlePageNumbers(pageNumber) {
-    const pageNumbersArray = [];
-    const totalPages = Math.ceil(cardsTotal / cardsPerPage);
-
-    if (totalPages > 0 && pageNumber >= 1 && pageNumber <= totalPages) {
+  const pageNumbersArray = [];
+  const totalPages = Math.ceil(cardsTotal / cardsPerPage);
+  let startNumber = 1;
+  let endNumber;
+  if (totalPages > 0 && currentPage >= 1 && currentPage <= totalPages) {
+    if (totalPages < 5) {
+      startNumber = 1;
+      endNumber = totalPages;
+    } else {
       const startNumber =
-        pageNumber !== totalPages ? Math.max(1, pageNumber) : pageNumber - 4;
+        currentPage !== totalPages ? Math.max(1, currentPage) : currentPage - 4;
       const endNumber = Math.min(startNumber + 4, totalPages);
-
-      for (let i = startNumber; i <= endNumber; i++) {
-        pageNumbersArray.push(i);
-      }
     }
-    return pageNumbersArray;
+    for (let i = startNumber; i <= endNumber; i++) {
+      pageNumbersArray.push(i);
+    }
   }
+
   const renderPageButtons = () => {
-    // handlePageNumbers(currentPage);
-    return pageNumbers.map((index) => {
+    return pageNumbersArray.map((index) => {
       const isActive = currentPage === index;
       const buttonClassName = isActive ? style.active : "";
       return (
@@ -54,54 +38,46 @@ const PaginateBar = (props) => {
 
   // Handle navigation to previous page
   const goToPreviousPage = () => {
-    if (currentPage < pageNumbers[0]) {
-      //el numero no esta en los botones
-      setPageNumbers(handlePageNumbers(currentPage));
-    }
-    PaginateBar(currentPage - 1);
+    if (currentPage > 1) handlePaginate(currentPage - 1);
   };
 
   // Handle navigation to next page
   const goToNextPage = () => {
-    if (currentPage > pageNumbers[5]) {
-      //el numero no esta en los botones
-      setPageNumbers(handlePageNumbers(currentPage));
-    }
-    PaginateBar(currentPage + 1);
+    if (currentPage < Math.ceil(cardsTotal / cardsPerPage))
+      handlePaginate(currentPage + 1);
   };
 
-  const searchPagesUp = () => {
-    const pageNumbersArray = pageNumbers;
-    const totalPages = Math.ceil(cardsTotal / cardsPerPage);
-    const lastPageNumber = pageNumbersArray[pageNumbersArray.length - 1];
-    if (lastPageNumber <= totalPages) {
-      pageNumbersArray.push(lastPageNumber + 1); //agrego al final
-      pageNumbersArray.shift(); //saco el primero
-      setPageNumbers([...pageNumbersArray]);
-    }
-  };
+  // const searchPagesUp = () => {
+  //   const pageNumbersArray = pageNumbers;
+  //   const totalPages = Math.ceil(cardsTotal / cardsPerPage);
+  //   const lastPageNumber = pageNumbersArray[pageNumbersArray.length - 1];
+  //   if (lastPageNumber <= totalPages) {
+  //     pageNumbersArray.push(lastPageNumber + 1); //agrego al final
+  //     pageNumbersArray.shift(); //saco el primero
+  //     setPageNumbers([...pageNumbersArray]);
+  //   }
+  // };
 
-  const searchPagesDown = () => {
-    const pageNumbersArray = pageNumbers;
-    const firstPageNumber = pageNumbersArray[0];
-    if (firstPageNumber >= 0) {
-      pageNumbersArray.unshift(firstPageNumber - 1); //agrego al ppio
-      pageNumbersArray.pop(); //saco el ultimo
-      setPageNumbers([...pageNumbersArray]);
-    }
-  };
+  // const searchPagesDown = () => {
+  //   const pageNumbersArray = pageNumbers;
+  //   const firstPageNumber = pageNumbersArray[0];
+  //   if (firstPageNumber >= 0) {
+  //     pageNumbersArray.unshift(firstPageNumber - 1); //agrego al ppio
+  //     pageNumbersArray.pop(); //saco el ultimo
+  //     setPageNumbers([...pageNumbersArray]);
+  //   }
+  // };
 
   const searchPagesBeginning = () => {
-    setPageNumbers(handlePageNumbers(1));
+    // setPageNumbers(handlePageNumbers(1));
   };
 
   const searchPagesEnd = () => {
-    setPageNumbers(handlePageNumbers(Math.ceil(cardsTotal / cardsPerPage)));
+    // setPageNumbers(handlePageNumbers(Math.ceil(cardsTotal / cardsPerPage)));
   };
 
   const handlePaginate = (newPage) => {
-    setCurrentPage(newPage);
-    paginated(newPage);
+    handleOriginPaginate(newPage);
   };
 
   const down = "<";
@@ -116,7 +92,7 @@ const PaginateBar = (props) => {
       >
         ⏪
       </button>
-      <button
+      {/* <button
         className={style.buttonUpDown}
         onClick={searchPagesBeginning}
         // disabled={buttonsValues.button1 === 1}
@@ -129,11 +105,11 @@ const PaginateBar = (props) => {
         // disabled={buttonsValues.button1 === 1}
       >
         {down}
-      </button>
+      </button> */}
 
       {renderPageButtons()}
 
-      <button
+      {/* <button
         className={style.buttonUpDown}
         onClick={searchPagesUp}
         // disabled={buttonsValues.button5 === totalPages}
@@ -146,10 +122,10 @@ const PaginateBar = (props) => {
         // disabled={buttonsValues.button5 === totalPages}
       >
         {up + "I"}
-      </button>
+      </button> */}
       <button
         className={style.buttonToGo}
-        onClick={() => handlePaginate(currentPage + 1)}
+        onClick={goToNextPage}
         disabled={currentPage === Math.ceil(cardsTotal / cardsPerPage)}
       >
         ⏩

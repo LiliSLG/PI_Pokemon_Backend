@@ -1,10 +1,17 @@
-/* Search Bar specific styles */
 .searchBar {
-  flex: 1;
-  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  /* flex: 1; */
+  /* margin-right: 10px; */
+
   /* flex-basis: 10%; */
   /* flex-grow: 3 */
   /* align-items: center; */
+}
+
+.searchPanel {
+  /* padding: 2px; */
+  align-items: center;
 }
 
 .searchBar input {
@@ -15,13 +22,31 @@
   /* flex: 1; */
 }
 
-.searchBar button {
+.searchButton {
   padding: 5px 10px;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+.orderPanel {
+  padding: 3px;
+}
+
+.orderButton {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #fff;  
+  color: #007bff;
 }
 /* .searchBar {
     display: flex;
