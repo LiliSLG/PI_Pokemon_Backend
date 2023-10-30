@@ -1,6 +1,6 @@
 DB_USER=fl0user
-DB_PASSWORD=KSIcU59pfNGe
-DB_HOST=ep-odd-salad-28553891.us-east-2.aws.neon.tech
+DB_PASSWORD=KdQaqVxu9h1N
+DB_HOST=ep-polished-haze-56223027.us-east-2.aws.neon.fl0.io
 DB_NAME=pokemon
 DB_PORT=5432
 PORT=3001
