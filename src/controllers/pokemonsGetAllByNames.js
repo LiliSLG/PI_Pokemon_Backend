@@ -8,10 +8,11 @@ const { API_URL } = process.env;
 const pokemonsGetAllByNames = async () => {
   // Retrieves all pokemons by their names.
   let pokemonsByNameFromAPI = await PokemonName.findAll({
-    attributes: ["name", [Sequelize.literal("false"), "created"]],
+    attributes: ["name"],
   });
   if (pokemonsByNameFromAPI.length === 0) {
-    for (let index = 0; index <= 200; index++) {
+    // busco todos los nombres en la api
+    for (let index = 0; index <= 20; index++) {
       const offset = index * 100 + 1; // Calculate the offset based on the current page
       const limit = 100; // Set the limit to the page size
 
@@ -28,22 +29,21 @@ const pokemonsGetAllByNames = async () => {
       const pokemonDataFromAPI = pokemonUrlResponsesAPI.map(
         (response) => response.data
       );
-      const sortedPokemonsFromAPI = pokemonMapNames(pokemonDataFromAPI).sort(
-        (a, b) => a.name.localeCompare(b.name) // Sort by name in ascending order
-      );
+      const sortedPokemonsFromAPI = pokemonMapNames(pokemonDataFromAPI);
       await PokemonName.bulkCreate(sortedPokemonsFromAPI);
     }
-  }
-  pokemonsByNameFromAPI = await PokemonName.findAll({
-    attributes: ["name", [Sequelize.literal("false"), "created"]],
-  });
-  const pokemonsByNameFromDB = await Pokemon.findAll({
-    attributes: ["name", [Sequelize.literal("true"), "created"]],
-  });
-  const sortedPokemons = [
-    ...pokemonsByNameFromDB,
-    ...pokemonsByNameFromAPI,
-  ].sort((a, b) => a.name.localeCompare(b.name));
+    pokemonsByNameFromAPI = await PokemonName.findAll({
+      attributes: ["name"],
+    });
+  } 
+  pokemonsByNameFromAPI = pokemonMapNames(pokemonsByNameFromAPI);
+  // pokemonsByNameFromAPI = pokemonsByNameFromAPI.map(
+  //   (pokemon) => pokemon.name
+  // );
+
+  const sortedPokemons = [...pokemonsByNameFromAPI].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
   return sortedPokemons;
 };
 
