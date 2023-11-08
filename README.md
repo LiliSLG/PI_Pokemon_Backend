@@ -274,6 +274,10 @@ Check result of curl https://registry.npmjs.org/
 Clear the cache: npm cache clean --force
 Try to run npm install
 
+npm install express jsonwebtoken bcrypt sequelize pg passport passport-jwt
+npm install passport-google-oauth20 front> npm install jwt-decode
+
+
 front:
 npm react react-scripts
 

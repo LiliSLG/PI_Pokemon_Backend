@@ -9,14 +9,20 @@ const { pokemonDelete } = require("./pokemonDelete");
 
 const { typesGet } = require("./typesGet");
 
+const { userLogin } = require("./userLogin");
+const { userPost } = require("./userPost");
+
+
 module.exports = {
   pokemonsGetAll,
   pokemonsGetAllByNames,
-  pokemonGetByName,  
+  pokemonGetByName,
   pokemonsGetByNameInAPI,
   pokemonGetById,
   pokemonPost,
   pokemonPut,
   pokemonDelete,
-  typesGet
+  typesGet,
+  userLogin,
+  userPost,
 };

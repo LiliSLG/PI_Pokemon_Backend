@@ -9,13 +9,16 @@ const {
   pokemonHandlerDelete,
 } = require("../handlers");
 
+const passport = require('passport');
+
 const pokemonRouter = express.Router();
 
 pokemonRouter.get("/names", pokemonHandlerGetAllByNames);
 pokemonRouter.get("/name?", pokemonHandlerGetAll);
 pokemonRouter.get("/", validatePagination, pokemonHandlerGetAll);
 pokemonRouter.get("/:id", pokemonHandlerById);
-pokemonRouter.post("/", validatePokemon, pokemonHandlerPost);
+// pokemonRouter.post("/", validatePokemon, pokemonHandlerPost);
+pokemonRouter.post('/', passport.authenticate('jwt', { session: false }), validatePokemon, pokemonHandlerPost);
 pokemonRouter.put("/:id", validatePokemon, pokemonHandlerPut);
 pokemonRouter.delete("/:id", pokemonHandlerDelete);
 

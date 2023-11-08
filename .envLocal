@@ -1,7 +1,8 @@
 DB_USER=postgres
 DB_PASSWORD=matuasto2023
 DB_HOST=localhost
-DB_NAME=rickandmorty
+DB_NAME=pokemon
 DB_PORT=5432
 PORT=3001
 API_URL=https://pokeapi.co/api/v2/
+SECRET=

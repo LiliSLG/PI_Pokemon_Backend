@@ -1,11 +1,14 @@
 const { pokemonHandlerGetAll } = require("./pokemonHandlerGetAll");
-const { pokemonHandlerGetAllByNames } = require("./pokemonHandlerGetAllByNames");
+const {
+  pokemonHandlerGetAllByNames,
+} = require("./pokemonHandlerGetAllByNames");
 const { pokemonHandlerById } = require("./pokemonHandlerById");
 const { pokemonHandlerPost } = require("./pokemonHandlerPost");
 const { pokemonHandlerPut } = require("./pokemonHandlerPut");
 const { pokemonHandlerDelete } = require("./pokemonHandlerDelete");
 const { typesHandlerGetAll } = require("./typesHandlerGetAll");
-
+const { userHandlerLogin } = require("./userHandlerLogin");
+const { userHandlerPost } = require("./userHandlerPost");
 
 module.exports = {
   pokemonHandlerGetAll,
@@ -14,5 +17,7 @@ module.exports = {
   pokemonHandlerPost,
   pokemonHandlerPut,
   pokemonHandlerDelete,
-  typesHandlerGetAll
+  typesHandlerGetAll,
+  userHandlerLogin,
+  userHandlerPost,
 };
